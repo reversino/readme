@@ -32,34 +32,28 @@ fluentbit и сервер 1С:Предприятие должны быть ус�
 </config>
   
   1.2 ТЖ с фильтрацией только необходимого:
+
 <?xml version="1.0"?>
 <config xmlns="http://v8.1c.ru/v8/tech-log">
         <dump create="false"/>
-
         <log location="/mnt/nfsshare/tj/1c-al01/logs"  history="4" placement="plain" format="json">
                 <event>
                         <eq property="name" value="DBPOSTGRS"/>
                         <ge property="Durationus" value="100000"/>
                 </event>
-
                 <property name="Context"/>
                 <property name="p:processName"/>
         </log>
-
         <log location="/mnt/nfsshare/tj/1c-al01/logs"  history="4" placement="plain" format="json">
-
                  <event>
                         <eq property="name" value="TLOCK"/>
                 </event>
-
                 <event>
                         <eq property="name" value="TTIMEOUT"/>
                 </event>
-
                 <event>
                         <eq property="name" value="TDEADLOCK"/>
                 </event>
-
                 <property name="t:connectID"/>
                 <property name="Regions"/>
                 <property name="Locks"/>
@@ -70,14 +64,11 @@ fluentbit и сервер 1С:Предприятие должны быть ус�
                 <property name="Context"/>
                 <property name="p:processName"/>
         </log>
-
         <log location="/mnt/nfsshare/tj/1c-al01/logs" history="4" placement="plain" format="json">
-
                 <event>
                         <eq property="name" value="CALL"/>
                         <ge property="Duration" value="10000"/>
                 </event>
-
                 <property name="Usr"/>
                 <property name="Context"/>
                 <property name="SessionID"/>
@@ -86,21 +77,20 @@ fluentbit и сервер 1С:Предприятие должны быть ус�
                 <property name="InBytes"/>
                 <property name="OutBytes"/>
                 <property name="p:processName"/>
-
         </log>
-
-</config>
-
+	</config>
+ 
 Внимание на поля placement и format. 
-В данном случае placement=plain означает, что файлы будут расположены в указанной директории 
-без создания промежуточных каталогов с именами процессов,
- а format=json определяет содержимое логов в формате JSON  
+	В данном случае placement=plain означает, что файлы будут расположены в указанной директории
+ 		без создания промежуточных каталогов с именами процессов,а format=json определяет содержимое логов в формате JSON  
 
 2. Применяем владельца sudo chown usr1cv8:grp1cv8 /opt/1cv8/x86_64/8.3.25.1336/conf/logcfg.xml
 
 3. Теперь главное:
- установка Opensearch )
-используется мануал https://opensearch.org/docs/latest/install-and-configure/install-opensearch/index/
+ установка Opensearch.
+
+Используется мануал https://opensearch.org/docs/latest/install-and-configure/install-opensearch/index/
+
 смотрим по совместимости версии Java
 для установки последней версии надо такие: 
 
@@ -119,6 +109,7 @@ Port number 	OpenSearch component
 9600 	Performance Analyzer
 
 5. важные моменты перед установкой: проверяем параметры
+
 cat /proc/sys/vm/max_map_count
 
  ставим следующее значение /etc/sysctl.conf:
@@ -129,30 +120,39 @@ vm.max_map_count=262144
 
 6. Установка Java:
 java --version
+
 wget https://download.oracle.com/java/23/latest/jdk-23_linux-aarch64_bin.rpm
 
-7. Есть несколько вариантов установки opensearch:
+8. Есть несколько вариантов установки opensearch:
 мы выберем стандартный вариант с версией 2.17
 Делаем локальную репу
+
 sudo curl -SL https://artifacts.opensearch.org/releases/bundle/opensearch/2.x/opensearch-2.x.repo -o /etc/yum.repos.d/opensearch-2.x.repo
 
 вычищаем кеш:
+
 sudo yum clean all
 
 проверяем:
+
  sudo yum repolist
 
 смотрим доступные версии:
+
 sudo yum list opensearch --showduplicates
 
 можем поставить последнюю версию так:
+
 sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<custom-admin-password> yum install opensearch
 
 либо выбрать вот так:
+
 sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<custom-admin-password> yum install 'opensearch-2.17.0'
 
-выполняем запуск и проверку:
+##выполняем запуск и проверку:
+
  sudo systemctl start opensearch
+ 
  sudo systemctl status opensearch
 
 сразу оговоримся что ставится демо пакет и tls
