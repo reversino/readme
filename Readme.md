@@ -32,6 +32,7 @@ fluentbit и сервер 1С:Предприятие должны быть ус�
 </config>
   
   1.2 ТЖ с фильтрацией только необходимого:
+  
 <?xml version="1.0"?>
 <config xmlns="http://v8.1c.ru/v8/tech-log">
         <dump create="false"/>
@@ -107,7 +108,8 @@ Port number 	OpenSearch component
 9600 	Performance Analyzer
 
 5. важные моменты перед установкой: проверяем параметры
-<cat /proc/sys/vm/max_map_count>
+
+cat /proc/sys/vm/max_map_count
 
  ставим следующее значение /etc/sysctl.conf:
 
