@@ -17,10 +17,11 @@ fluentbit и сервер 1С:Предприятие должны быть ус�
 1. настройка сервера 1с и ТЖ:
 два варианта полная инфа или только выборочно:
   1.1 вариант с полным ТЖ:
-  
-  /opt/1cv8/x86_64/8.3.25.1336/conf/logcfg.xml
 
-<?xml version='1.0' encoding='UTF-8'?>
+  /opt/1cv8/x86_64/8.3.25.1336/conf/logcfg.xml
+  
+##
+<tab><tab>code/  <?xml version='1.0' encoding='UTF-8'?>
 <config xmlns="http://v8.1c.ru/v8/tech-log">
   <log location="/1c/logs" history="4" placement="plain" format="json">
     <event>
@@ -32,7 +33,6 @@ fluentbit и сервер 1С:Предприятие должны быть ус�
 </config>
   
   1.2 ТЖ с фильтрацией только необходимого:
-
 <?xml version="1.0"?>
 <config xmlns="http://v8.1c.ru/v8/tech-log">
         <dump create="false"/>
